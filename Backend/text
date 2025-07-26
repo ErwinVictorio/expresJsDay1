@@ -1,0 +1,80 @@
+const express = require('express');
+const app = express();
+// ✅ JSON body parser MUST come BEFORE any routes
+app.use(express.json());
+
+// import the uuid
+// import { v4 as productId } from 'uuid';
+
+//  reqire the file productList
+const ProductList = require('./Backend/productList');
+
+// store the product here 
+ const products = [];
+
+
+//  for geeting the data
+app.get('/api/product', (req, res) => {
+
+ res.send(products);
+});
+
+
+// view product by id
+app.get('/api/product/:id',(req,res) =>{ // for viewing product by id
+  
+    const id = parseInt(req.params.id); // get id   from URL and convert into number
+    const product = products.find(p => p.id === id);
+
+    //  check product is exist
+        if (product) {
+            return res.send(product)
+        }
+
+    return res.json({message: "This id is not exist!"})
+})
+
+
+
+//  for updating product
+app.put('/api/product/:id',(req,res) =>{
+    const id = parseInt(req.params.id); // get  the id from products
+
+    const product = products.find(p => p.id === id); // get the product by id
+
+    // check if product is not exist
+
+    if (!product) {
+         return res.json({message: "Product Not Found"})
+    }
+
+        const {name,price} = req.body;
+
+    //  // Make sure req.body only includes fields you want to allow (e.g., don't let users change id accidentally).
+    Object.assign(product, {name,price})
+
+    // then restun the success message updated
+    return res.json({message: `Successfully updated`})  
+})
+
+
+// for sending data using post method
+app.post('/api/product',(req, res) =>{
+
+    const newProduct = req.body;
+
+    // validate the inputs   
+      if (!newProduct.name || !newProduct.price) {
+          return res.status(400).json({message: "name and price is reqired"})
+      }
+      products.push(newProduct); //push the newProduct on empty arra    y 
+      return res.status(200).json({message: "Successfully added new product"})
+})
+
+
+// for deleting product
+
+
+app.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000');
+});
