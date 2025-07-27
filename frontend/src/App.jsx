@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Products  from './Components/productList';
+import CreateModalProduct from './Components/createProducts';
 import './App.css'
 
 function App() {
@@ -9,6 +10,9 @@ function App() {
       <div className="container  text-danger">
          <Products/>
       </div>
+
+      {/* Modal for creating Product */}
+      <CreateModalProduct/>
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from 'axios'
+import Swal from 'sweetalert2';
 
 const ProductList = () => {
 
@@ -23,18 +24,42 @@ const ProductList = () => {
 
 
     //  handle Delete Product
+    async function HandleDelete(id) {
 
-     async function HandleDelete(id) {
-        
-        await axios.delete(`http://127.0.0.1:3000/api/products/${id}`,function(){
-            headers:{
-                Accept: "application/json"
+        await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                try {
+                    axios.delete(`http://127.0.0.1:3000/api/products/${id}`, function () {
+                        headers: {
+                            Accept: "application/json"
+                        }
+                    }).then((res) => {
+                        // Update local state by filtering out deleted product
+                        SetProduct(prevProducts => prevProducts.filter(product => product.id !== id));
+                        Swal.fire({
+                            title: "Good job!",
+                            text: res.data.message,
+                            icon: "success"
+                        });
+                    })
+                } catch (e) {
+                    Swal.fire({
+                        title: "Opps!",
+                        text: `Error ${e}}`,
+                        icon: "error"
+                    });
+                }
             }
-        }).then((res)=>{
-          console.log(res);
-        })
-
-     }
+        });
+    }
 
 
     return (
@@ -42,7 +67,7 @@ const ProductList = () => {
             <div className="card border-0">
                 <div className="card-header bg-transparent d-flex justify-content-between align-items-center">
                     <h5>Product List</h5>
-                    <button className="btn btn-outline-primary">
+                    <button data-bs-toggle="modal" data-bs-target="#createProductModal" className="btn btn-outline-primary">
                         Add Product
                     </button>
                 </div>
@@ -56,7 +81,8 @@ const ProductList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((item,index) => {
+
+                        {products.map((item, index) => {
 
                             return (
                                 <tr key={index}>
@@ -64,7 +90,7 @@ const ProductList = () => {
                                     <td>{item.product_name}</td>
                                     <td>{item.price}</td>
                                     <td>
-                                        <button onClick={()=> HandleDelete(item.id)} className="btn">
+                                        <button onClick={() => HandleDelete(item.id)} className="btn">
                                             Delete
                                         </button>
                                         <button className="btn">
