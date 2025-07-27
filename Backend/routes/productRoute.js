@@ -1,6 +1,7 @@
 const express = require('express');
 
 const app = express();
+
 // app.use(express.json())
 const router = express.Router();
 const productController = require('../controller/productController');
@@ -17,6 +18,12 @@ router.post('/',validate(productSchema), productController.createProduct)
 
 //  routes for  showing product by id
  router.get('/:id',productController.showById)
+
+//  route for updating product
+router.put('/:id',validate(productSchema),productController.updateProduct)
+
+//  route for destroy the product
+router.delete('/:id',productController.DestroyProduct)
 
 
 module.exports = router;
