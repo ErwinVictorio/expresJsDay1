@@ -81,7 +81,8 @@ async function updateProduct(req, res) {
 async function DestroyProduct(req, res) {
 
     const { id } = req.params; //to get id from url
-
+     console.log(id);
+     
     try {
         await productModel.destroy(id);
 

@@ -3,11 +3,14 @@ import { useState } from "react";
 import axios from 'axios'
 import Swal from 'sweetalert2';
 
+import ProductModalUpdate from './updateProduct';
+
 const ProductList = () => {
 
     //  hanndling for displaying the product list
 
     const [products, SetProduct] = useState([])
+
 
     useEffect(() => {
         axios.get('http://127.0.0.1:3000/api/products', {
@@ -15,8 +18,6 @@ const ProductList = () => {
                 'Accept': "application/json"
             }
         }).then((res) => {
-            console.log(typeof res.data)
-
             SetProduct(res.data)
         })
 
@@ -42,6 +43,7 @@ const ProductList = () => {
                             Accept: "application/json"
                         }
                     }).then((res) => {
+                        
                         // Update local state by filtering out deleted product
                         SetProduct(prevProducts => prevProducts.filter(product => product.id !== id));
                         Swal.fire({
@@ -59,6 +61,12 @@ const ProductList = () => {
                 }
             }
         });
+    }
+
+
+    async function HandleUpdate(e) {
+        console.log(e);
+        
     }
 
 
@@ -93,7 +101,7 @@ const ProductList = () => {
                                         <button onClick={() => HandleDelete(item.id)} className="btn">
                                             Delete
                                         </button>
-                                        <button className="btn">
+                                        <button onClick={(e) => HandleUpdate(item.id)}  className="btn">
                                             Update
                                         </button>
                                     </td>
