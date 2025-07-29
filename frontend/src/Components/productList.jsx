@@ -86,8 +86,16 @@ const ProductList = () => {
 
   async  function HandleViewProduct(id){
  
-         
-     
+      axios.get(`http://localhost:3000/api/product/${id}`,
+        {
+          headers:{
+            Accept: 'application/json'
+          }
+        }
+      ).then((res)=>{
+         SetSelectedProduct(res.data)
+      })
+        
         const ModalViewProduct = new bootstrap.Modal(document.getElementById('viewProductInfo'))
         ModalViewProduct.show()
     }
