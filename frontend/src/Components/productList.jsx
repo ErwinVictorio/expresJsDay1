@@ -4,12 +4,14 @@ import axios from 'axios'
 import Swal from 'sweetalert2';
 
 import ProductModalUpdate from './updateProduct';
+import ViewModalProduct from './viewProductInfo';
 
 const ProductList = () => {
 
     //  hanndling for displaying the product list
 
     const [products, SetProduct] = useState([])
+    const  [selectedProduct,SetSelectedProduct ] = useState(null)
 
 
     useEffect(() => {
@@ -20,7 +22,6 @@ const ProductList = () => {
         }).then((res) => {
             SetProduct(res.data)
         })
-
     }, [])
 
 
@@ -64,10 +65,35 @@ const ProductList = () => {
     }
 
 
-    async function HandleUpdate(e) {
-        console.log(e);
+    async function HandleUpdate(id) {
+       
+        // pull the selected data base on id
+          axios.get(`http://localhost:3000/api/products/${id}`,
+
+            {
+                headers:{
+                    Accept: 'application/json'
+                }
+            }
+          ).then((res) =>{
+                SetSelectedProduct(res.data.data)
+            })
         
+        const Modal = new bootstrap.Modal(document.getElementById('updateFormProduct'))
+        Modal.show()
     }
+
+
+  async  function HandleViewProduct(id){
+ 
+         
+     
+        const ModalViewProduct = new bootstrap.Modal(document.getElementById('viewProductInfo'))
+        ModalViewProduct.show()
+    }
+
+
+
 
 
     return (
@@ -98,11 +124,14 @@ const ProductList = () => {
                                     <td>{item.product_name}</td>
                                     <td>{item.price}</td>
                                     <td>
-                                        <button onClick={() => HandleDelete(item.id)} className="btn">
+                                        <button onClick={() => HandleDelete(item.id)} className="btn btn-outline-danger">
                                             Delete
                                         </button>
-                                        <button onClick={(e) => HandleUpdate(item.id)}  className="btn">
+                                        <button onClick={() => HandleUpdate(item.id)}  className="btn btn-outline-secondary">
                                             Update
+                                        </button>
+                                        <button onClick={() => HandleViewProduct(item.id)} className="btn btn-outline-primary">
+                                            view
                                         </button>
                                     </td>
                                 </tr>
@@ -113,6 +142,13 @@ const ProductList = () => {
                     </tbody>
                 </table>
             </div>
+        
+        {/*  call the update modal to show the selected product */}
+           <ProductModalUpdate product={selectedProduct}/>
+           
+           {/* modal for viewing product base on id */}
+           <ViewModalProduct product={selectedProduct}/>
+ 
         </>
     )
 }

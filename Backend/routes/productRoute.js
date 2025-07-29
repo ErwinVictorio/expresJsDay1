@@ -13,16 +13,16 @@ const validate = require('../middlewares/productValidator')
 // routes for products
 router.get('/', productController.getProduct);
 
-// routes for creating product
+//routes for creating product
 router.post('/',validate(productSchema), productController.createProduct)
 
-//  routes for  showing product by id
+//routes for  showing product by id
  router.get('/:id',productController.showById)
 
-//  route for updating product
+//route for updating product
 router.put('/:id',validate(productSchema),productController.updateProduct)
 
-//  route for destroy the product
+//route for destroy the product
 router.delete('/:id',productController.DestroyProduct)
 
 

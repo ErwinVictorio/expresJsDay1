@@ -73,7 +73,7 @@ async function updateProduct(req, res) {
     } catch (e) {
         return res.status(500).json({
             success: false,
-            message: `error ${e.error}`
+            message: `errorghjhjhj ${e}`
         })
     }
 }

@@ -8,7 +8,6 @@ const CreaateProduct = () => {
     const [Data, SetData] = useState({});
 
     //  handle the submibmit data
-
     function HandleSubmitForm(e) {
         e.preventDefault()
 
