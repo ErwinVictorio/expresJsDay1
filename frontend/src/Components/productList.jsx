@@ -11,7 +11,9 @@ const ProductList = () => {
     //  hanndling for displaying the product list
 
     const [products, SetProduct] = useState([])
-    const  [selectedProduct,SetSelectedProduct ] = useState(null)
+    const  [selectedProduct,SetSelectedProduct ] = useState([])
+
+  
 
 
     useEffect(() => {
@@ -86,7 +88,7 @@ const ProductList = () => {
 
   async  function HandleViewProduct(id){
  
-      axios.get(`http://localhost:3000/api/product/${id}`,
+      axios.get(`http://localhost:3000/api/products/${id}`,
         {
           headers:{
             Accept: 'application/json'
@@ -99,9 +101,6 @@ const ProductList = () => {
         const ModalViewProduct = new bootstrap.Modal(document.getElementById('viewProductInfo'))
         ModalViewProduct.show()
     }
-
-
-
 
 
     return (
@@ -145,10 +144,9 @@ const ProductList = () => {
                                 </tr>
                             )
                         })}
-
-
                     </tbody>
                 </table>
+                <h1 className="text-red-600">Hello</h1>
             </div>
         
         {/*  call the update modal to show the selected product */}

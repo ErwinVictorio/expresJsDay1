@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 const ProductUpdateForm = ({ product }) => {
+    
     const [formData, setFormData] = useState({
         product_name: '',
         price: '',
@@ -33,8 +34,7 @@ const ProductUpdateForm = ({ product }) => {
                 }
             }
         ).then((res) => {
-            console.log(res);
-            
+
             Swal.fire({
                 title: "Good job!",
                 text: res.data.message,

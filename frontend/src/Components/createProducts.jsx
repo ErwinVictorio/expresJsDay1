@@ -5,35 +5,41 @@ import axios from 'axios'
 
 const CreaateProduct = () => {
 
-    const [Data, SetData] = useState({});
-
+    const [Data, SetData] = useState({
+         productName: "",
+            price: "",
+            des: ""
+    });
+    const [ProductNameErrors, SetProductNameErrors] = useState();
     //  handle the submibmit data
-    function HandleSubmitForm(e) {
+    async function HandleSubmitForm(e) {
         e.preventDefault()
-
-        //  next handle the axios request for sending data on database
-        axios.post('http://localhost:3000/api/products',
+        try{
+        const res = await axios.post('http://localhost:3000/api/products',
             {
-                product_name: Data.productName,
-                price: parseFloat(Data.price),
-                des: Data.des
+                product_name: Data.productName ?? "" ,
+                price: Data.price ? parseFloat(Data.price) : null,
+                des: Data.des ?? ""
             },
-            
+             
             {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-        ).then((res) => {
+        )
+        
+        console.log(res);
+         } catch (error){
+            // console.error(error.response.data.errors.message[0])
+            // console.error(error);
+            // SetProductNameErrors(error?.response?.data?.errors[0].message )
+        console.error(error.response.data.errors.message);
 
-            if (res.status === 200) { // if status is === 2000 
-                Swal.fire({
-                    title: "Good job!",
-                    text: res.data.message,
-                    icon: "success"
-                });
-            }
-        })
+         }
+
+        //  next handle the axios request for sending data on database
+        
     }
 
     return (
